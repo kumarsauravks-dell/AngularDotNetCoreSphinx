@@ -1,0 +1,131 @@
+#Video 1
+Target at the end of the course 
+- Develop the Restful WebApi with Asp.Net Core
+- Consume the Api in Angular Application
+- Understad lots of key concepts of Asp.Net Core Framework
+
+Important Topics
+- Fundamentals
+- Restful Apis
+- Middleware
+- Dependency Injection
+- Routing
+- Format Response
+- Model Binder
+- Real World Book Store Api Application
+- Entity Framework Core 5.0
+- Consume Api in Angular Application
+- Login and SignUp with JWT
+------------------------------------------------------------
+#Video 2
+Need of WebApi(The Problem)
+- Mano hume ek website bnani hai , hmne use bnai Asp.Net MVC me aur database k liye sql use kiya. Hmara website abi database se directly connected hai.
+    In future hme website ki android version bhi chaiye aur Ios version bhi. To kya problems aa skti hai:-
+    - Duplicate logic for each Application.
+    - Error prone code (Business logic is written in each Application). - galti se koi llogic miss kr diya
+    - Some frontend Framework can not communicate with database directly.
+    - Hard to maintain. - if need to improve something in one application then need to impletement the same for others too.
+-------------------------------------------------------------
+#Video 3
+Need of WebApi(The Solution)
+- Scenario 1 -----> website -> database
+- Scenario 2 -----> website + android app + ios app <-> database (problem discussed above)
+- Scenario 3 -----> website + android app + ios app <-> WebApi <-> database 
+
+- frontend application can not talk with the database directly . So we need a mediator i.e Api
+- Avoid business logic Duplication.
+- Extend Application functionality
+- Abstraction - frontend developer ko directly database ke logic ka direct access nhi, means WebApi k through hmne ek new layer of Abstraction generate kiya.
+- Security - obviously jab database se directly interact nhi kr paa rhe to more secured hua.
+--------------------------------------------------------------
+#Video 4
+What is WebApi
+- API -> Application Programming Interface
+- Web API is a concept (not a technology) that works on HTTP protocol and it is used to extend the functionality of an application.
+    If we are using Google map in our application, it means Google is exposing his services to us by using the WebApi, hum bhi hum apne website ki functionality aur services ko extend kr sk skte hain users ko ya other application ko.
+
+How can we create a WebApi if it is not a technology?
+- using multiple technologies like Java,.Net,NodeJs etc.
+- each technology provides couple of Framework to develop the WebApi.
+- In DotNet we have the following Framework to create WebApi
+    - Asp.Net WebApi 2 (using .Net Framework)
+    - Asp.Net Core (using .Net Core)
+----------------------------------------------------------------
+#Video 5
+What is REST 
+- REST -> Representatation State Transfer
+- REST is a combination of couple of principles that must be followed by WebApi.
+    - Url Structure
+    - HTTP Verbs
+    - Staus code
+    - Stateless etc.
+-----------------------------------------------------------------
+#Video 6
+What is HTTP
+- Hyper Text Transfer Protocol
+- Used for the communication between client and the web server.
+- HTTP is a application layer protocol for distributed, collaborative, hypermedia information systems.
+    - distributed -> we never know where is the server but we can only use it via browser.
+-------------------------------------------------------------------
+#Video 7
+- HTTP Request and its components. Each Request have:
+    - Url
+    - Verb (Method)
+    - Header/s 
+    - Body
+    - Data 
+- HTTP Response and its components. Each Response have:
+    - Staus code
+    - Response Header
+    - Data
+    - etc.
+----------------------------------------------------------------------
+#Video 8 
+HTTP Verbs/Methods
+- GET
+    - Used to retrieve data.
+    - Example -> Get the book data, Search a Book, etc.
+- POST 
+    - Used to make a new entry in the database
+    - Example -> Add a new book etc.
+- PUT
+    - Used to update all the properties of current resource in the database.
+    - Example -> Update all properties (columns) of an existing book, etc.
+- PATCH
+    - Similar to PUT but it is used to update partial properties of current resource in a database.
+    - Example -> Update few properties (columns) of an existing book, etc.
+- DELETE 
+    - used to delete the resource from the database.
+    - Example -> Delete an existing book from database, etc.
+------------------------------------------------------------------------
+#Video 9
+Status Codes
+- Issued from the server and give some information about the Response.
+- All HTTP response status code are divided into 5 categories:
+    - 1xx -> informational response
+    - 2xx -> Successful
+    - 3xx -> Redirection
+    - 4xx -> Client Error
+    - 5xx -> Server Error
+-------------------------------------------------------------------------
+#Video 10
+Frequently Used Status Code 
+- 200 -> OK
+- 201 -> New resource created
+- 204 -> No Content (Server processed the Request successfully and it is not returning any Content)
+- 301 -> Moved Permanently
+- 302 -> Moved Temporarily
+- 400 -> Bad Request
+- 401 -> Unauthorised
+- 404 -> Not Found
+- 405 -> Method not allowed
+- 500 -> Internal Server Error
+- 503 -> Service unavailable (eg - down for maintenance)
+----------------------------------------------------------------------------
+#Video 11
+Http Request and Response Examples
+    - goto Google.com -> Right Click in the Browser -> Choose Inspect
+    - goto Network tab -> click on XHR -> Search for anything -> Click on any request and see the details(Request URL, Request Method , Status Code etc.)
+
+
+

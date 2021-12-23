@@ -1,0 +1,7 @@
+Q1. Create a component user-list using inline style. Display the text of this component with the color red.
+    Create a component client-list using inline template. Display the text of this component with color green.
+
+Q2. Create a button and in the click event add a function whick will give an alert message as "Button Clicked"
+
+Q3. Create 5 text boxes to show the trigger of events respectively 
+    keyup, keydown, blur, input, mouseover

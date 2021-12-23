@@ -1,0 +1,41 @@
+Solution 1
+- user-list.component.html
+    <h1 class="custom">user-list works!</h1>
+- user-list.component.ts
+    styles: [ `.custom{color:red}` ]
+
+- client-list.component.ts
+    template: `
+    <h1 class="success">
+      client-list works!
+    </h1> `
+-client-list.component.css
+    .success{
+        color: green;
+    }
+-------------------------------------------------
+Solution 2
+- app.component.html
+    <button (click)="getAlert('Button Clicked');">Click Me</button>
+- app.component.ts
+    getAlert(click:any){
+    alert(click)
+  }
+-------------------------------------------------
+Solution 3
+- app.component.html        
+    <input type="text" #one (keyup)="getData(one.value)" placeholder="keyup event" />
+    <br />
+    <input type="text" #two (keydown)="getData(two.value)" placeholder="keydown event" />
+    <br />
+    <input type="text" #three (blur)="getData(three.value)" placeholder="blur event" />
+    <br />
+    <input type="text" #four (input)="getData(four.value)" placeholder="input event" />
+    <br />
+    <input type="text" #five (mouseover)="getData('hovered')" placeholder="mouseover event" />
+    <br />
+    <input type="text" #six (mouseleave)="getData('left')" placeholder="mouseleave event" />
+- app.component.ts
+    getData(val:any){
+    console.log(val);
+  }

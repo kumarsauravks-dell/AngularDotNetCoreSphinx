@@ -1,0 +1,124 @@
+#Video 1
+- What is Angular
+    - Frontend Development Framework
+    - used to develop Single Page Application
+    - Developed by Google
+
+- Introduction to Angular
+    - supports MVC Framework
+    - Open Source
+    - Uses NPM and Command Line Interface(CLI)
+    - First released in 14-Sep-2016
+    - Current Version is 12.0
+
+- Angular vs Angular.Js
+    - Angular.Js is the oldest version not in use now.
+    - Latest Version after version2
+    - Angular is a re-written version, structured and upgraded Framework.
+
+- Topics Covered
+    - Installation, Structure, Basics, MVC, Advance, Routing, API, Forms, Interview, Project, What is new in Angular 12, How to use CSS.
+
+-------------------------------------------------
+#Video 2
+Setup and Installation 
+- Install Node and NPM
+    - Install the LTS Version because it is stable. 
+    - Check Command-> node -v, npm -v
+- Install Angular CLI
+    - Command -> npm install -g @angular/cli 
+    - Check -> ng version
+- Install First Angular App 
+    - Command -> ng new blog 
+    - cd blog -> code . -> ng serve 
+- Interview Questions
+    - Install specific version of Angular -> npm i -g @angular/cli@10.0.0
+    - Install Angular 2 version and use is simultenously -> nvm (node version manager)
+
+-----------------------------------------------------
+#Video 3
+- Important Files and Folders fror Beginners
+    - package.json, node_modules, src folder(app, assets, environments, index.html, main.js, style.css)
+- Important Files and Folders for Advance Users 
+    - package-lock.json, angular.json, tsconfig Files, .browserslistrc, karma.config.js, pollyfills.js
+- Interview Questions
+    - What happen whren we delete package.json file?
+        - Project will stop as it contains all the details and version of every files.
+    - Difference b/n package.json and package-lock.json?
+        - package.json contains the overall file description/version/commands but package-lock.json contains the detailed description and internal dependenc information of all files used in the Project.
+    - What happen whren we delete package-lock.json file?
+        - Project will not stop as it will reinstall all the details and version of every files from package.json and will generate package-lock.json again.
+--------------------------------------------------------
+#Video 4
+- Change the variable "title" in your app and display heading like "Hello title".
+---------------------------------------------------------
+#Video 5
+- Interpolation
+    - used to display dynamic data(properties and functions). eg: Hello {{title}}, Hello {{getTitle()}}
+    - can perform mathimatical operation . eg: {{2+2}}
+    - can perform comparison . eg: {{title=="Angular"}}
+- What we cant perform with Interpolation?
+    - Cant do assignment to a variable. eg: {{title="My Title"}}
+    - Cant use javascript function like typeOf. eg: {{typeOf(title)}}
+    - Cant increment an interger value. eg: {{num++}}
+    - Cant use keyword like new. eg: {{new num}}
+- Can we set a property value of html element through Interpolation?
+    - Yes. eg: class="{{title}}"
+-------------------------------------------------------
+#Video 6 
+- Angular CLI & Important Commands 
+    - To see comman Commands -> ng help
+    - To create a component -> ng generate component login / ng g c login
+    - To create a module -> ng generate module user-auth / ng g m user-auth
+    - To create a component inside a folder -> ng g c user-auth/sign-in
+    - To create a class -> ng g class dummy
+    - To create an Interface -> ng g interface dummyInterface
+    - To create a build -> ng build
+--------------------------------------------------------
+#Video 7
+- What happens when we create a component through CLI
+    - It will genrate 4 files .ts,.spec,.css,.html and also modifies the app.module.ts to include it in the project.
+-----------------------------------------------------------
+#Video 8
+- Inline style & In Inline Template
+    - Inline Style me alag se css file nhi bnegi.
+    - command -> ng g c user-list --inline-style
+    - verify -> goto component.ts file , Observe instead of styleUrls there is only styles 
+
+    - Inline Template me alag se html file nhi bnegi.
+    - command -> ng g c user-list --inline-template
+    - verify -> goto component.ts file , Observe instead of templateUrl there is only template 
+
+    - We can create both inline style and template at the same time 
+    - command -> ng g c user-list --inline-template --inline-style
+----------------------------------------------------------
+#Video 9
+- Module 
+    - A module is like a container which contains Components, Services, Pipes 
+    - eg: UserAuth module contains Login, Register, ForgetPassword components ; Services like ApiCall; Pipes like Helper;
+
+- Creating a module and some component iside it.
+    - ng g m user-auth
+    - ng g c user-auth/login
+    - goto user-auth.module.ts , create a exports array and add LoginComponent to that array
+    - goto app.module.ts and import UserAuth module and include it in imports array.
+    - goto app.component.ts ant try to display the login component there.
+
+- Interview Questions
+    Questions: When we define a function for the click event why it is comulsury to define the type because in the previous version it is not compulsory?
+    Ans: In Angular 12 , By default strict mode is true in tsconfig.js . If we change it to false then it is not required.
+-----------------------------------------------------------
+#Video 10
+- Events
+    - click 
+    - keyup - textbox me type kr k rukte hai tab trigger hota hai
+    - keydown - type krte hue fire hota rhta hai
+    - blur - type kr k dusre element me jayenge tab fire hoga
+    - input - jo bhi type kre fire hoga
+    - mouseover - control me mouse jayegi to fire hoga.
+    - mouseleave - control se mouse leave hogi tab call hoga.
+- Interview Questions
+    Questions: kya ek control me ek se jada events laga ste hain?
+    Ans: Yes
+
+
