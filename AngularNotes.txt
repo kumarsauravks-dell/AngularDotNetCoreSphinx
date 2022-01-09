@@ -120,5 +120,171 @@ Setup and Installation
 - Interview Questions
     Questions: kya ek control me ek se jada events laga ste hain?
     Ans: Yes
+-----------------------------------------------------------
+#Video 11
+- For an element if we assign it an id like #Box , we can easily access its properties like name,placeholder,value etc.
+-----------------------------------------------------------
+#Video 13
+- Styles in Angular
+    - Global Style - If we want to apply a class for global use , we define it in src/style.css file.
+    - Component Style - If we want a component related css we define it in its component.css file.
+    - Internal Style - We define it in <style></style> of a component.html
+- Interview Questions
+    Question: Priority of the css
+    Ans: Inline>Internal>Component>Global 
+------------------------------------------------------------
+#Video 14
+- Property Binding
+    - kisi element ki property to update krne k liye use krte hain.
+    - Property Binding ko hum boolean value k sath deal krne k liye krte hain, jabki interpolation me string and numbers k liye. disabled k example k sath samjh skte hain.
+#Video 15
+- If-Else
+    - To show the Content inside a if block we have to use ng-template.
+-----------------------------------------------------------
+#Video 16
+- Multiple Condition/else if
+    - Else if is not present here, if we have to check multiple condition we can use switch.
+    - To perform small multiple checks we can compare conditions using ===.
+------------------------------------------------------------
+#Video 17
+- Switch statement
+    - When we want to check for multiple if else then we use ngSwitch.
+    - If no condition matches then we can make use of SwitchDefault.
+------------------------------------------------------------
+#Video 18
+- Loops
+    - We can basically use loops to iterate through simple arrays or on object array.
+    - We can use loop inside a loop.
+    - javascript loop and angular loop are different . Generally we can use javascript loop in ts file but in html we prefer to use angular loop.
+-------------------------------------------------------------
+#Video 19
+- Nested Loops
+    - We can have nested arrays inside an array or object.
+    - It is also called multidimensional array.
+-------------------------------------------------------------
+#Video 20
+- Style Binding
+ - dynamic style binding bhi keh skte hai, means style ka data ts file se aayega.
+ - eg: [style.color]='color', [style/backgroundColor]='colorOne'
+-------------------------------------------------------------
+#Video 21
+- Creating a Simple Header Component
+    - When we create a header and display it a default margin get added so to correct it we have to add a global style to body ie. margin:0
+--------------------------------------------------------------
+#Video 22
+- Basic Angular Form 
+    - make Simple Form , Get Form value, print Form value
+    - Steps Involved
+        - Import FormsModule from '@angular/forms'; in AppModule and register it in imports array.
+        - Give an Id to your form and give value ngForm like #basicForm='ngForm'
+        - create a submit event in the 8859<form> tag like (ngSubmit)="getData(basicForm)" or (ngSubmit)="getData(basicForm.value)"
+        - for every control we are binding data we have to use a attribut ngModel to it.
+        - In component.ts file import the NgForm from '@angular/forms' which is the type of our form data we recieved in function.
+- Toggle element
+    - We can use *ngIf to Toggle a property.
+    - Instead of checking and assigning toggle value to a variable we can just say this.display=!this.display
+----------------------------------------------------------------
+#Video 23
+- Add Bootstrap
+    - library hai jo hmare website ko responsive bnati hai.
+    - command to install ng-bootstrap -> ng add @ng-bootstrap/ng-bootstrap
+    - official website -> ng-bootstrap.github.io
+----------------------------------------------------------------
+#Video 24
+- Install Material UI 
+    - official website - https://material.angular.io/
+    - Installation command -> ng add @angular/material
+    - To use Material UI , we have to import the module of that element iside our module.
+    - Material UI is heavier than Bootstrap.
+----------------------------------------------------------------
+#Video 25
+- Created a todo list where user can add task and also remove the task.
+----------------------------------------------------------------
+#Video 26
+- Send Data from Parent to Child Component
+    - create a child compomonent.
+    - lets say we take app component as parent component.
+    - create a variable data and store some number in it.
+    - when displaying child we need to send the data value in a property called item. <app-child [item]='data' </app-child>
+    - In child component.ts file recieve this item as a input property and display it. @Input item=0;
+    - we can add a button in app component and also change the value of data. We must see the item value get reflected in child component.
+----------------------------------------------------------------
+#Video 27
+- Make Component Reusable
+    - Create a UserDetails Component which will display list of users. Apart from users list we supplied it can also list other users list which shows that the component is reusable.
+----------------------------------------------------------------
+#Video 28
+- Send Data Child to Parent
+    - We can pass data from parent to chil using @Input() and from child to parent using @Output
+    - We can use property binding to pass data from parent to child and use event binding to pass data from child to parent.
+    - In case of @Output we need to have EventEmmiter also.
+----------------------------------------------------------------
+#Video 29
+- Two way binding
+    - First import FormsModule from @angular/core.
+    - use [(ngModel)] in the textbox
+    - same time me ek property ko update krna aur display krna Two way binding kahenge.
+    - same time me property ko update and display change event se bhi kr skte hai but ngModel is the simplest way.
+----------------------------------------------------------------
+#Video 30
+- Template Reference variable
+    - Hum jo textbox me # k sath ek id dete hain wo hai template Reference variable.
+    - Template Reference variable k help se hum us element sare attributes(name,placeholder..etc.) ko access kr skte hain.
+    - Type of the variable template Reference variable contains is HtmlInputElement.
+-----------------------------------------------------------------
+#Video 31
+- Basic of typescript
+    - To avoid unwanted errors at runtime we use typescript where type can be defined at the time of declaration only.
+    - Browser doesnt understand typescript , it converts typescript to javascript finally.
+    - we can define 2 types at the same time
+        - getData(item:number | boolean){
+            if(typeof(item)==="number"){
+                return item*20;
+            }
+        }
+    - We can define objects in a variable with the type.
+        - data:{name:string,phone:number}={name:'anil',phone:585478596};
+    - We can define arrays of specific datatype
+        - item:string[]=["Hello","Hi","Hey"]
+------------------------------------------------------------------
+#Video 32
+- Pipes in Angular
+    - Use of Pipes -> data ko ek format se dusre me transform kr dete hain.
+        - example to make our string in uppercase -> {{title | uppercase}}
+    - Problem that can resolve with Pipes -> date format
+        - today=Date();
+        - {{today | date : 'fullDate'}}
+    - We can use two pipes at same time.
+    - Pipes hum html k sath use krte hain. Without pipes bhi hum ts file me transform kr k data laa skte hai but it is lenthy and time consuming.
+--------------------------------------------------------------------
+#Video 33
+- Advance Pipes
+    - two pipes at same time -> {{title | slice :3:6 | uppercase}}
+    - json pipes to display json -> {{user | json}}
+    - decimal number in desired format -> {{2.3|number:'3.3-5'}}
+    - currency form {{20|currency:'INR'}}
+---------------------------------------------------------------------
+#Video 34
+- Custom Pipes
+    - Make a custom pipe with command
+    - Apply custom pipe
+    - update custom pipe file
+    - Apply Params in custom pipe
 
-
+    - command to create custom pipe -> ng g p usdInr
+    - when we create a ndew pipe it implements from PipeTransform
+    - we have to change the transform method inside it.
+    - first parameter of transform method is value and second is args array. We can basically use these parameter to transform the data retuned.
+---------------------------------------------------------------------
+#Video 35
+- Forms
+    - Why Forms are used?
+        -To send any kind of data/information to database
+        - But angular cant connect to database , so we can send data to api and api update the database
+        - Eg: Login,Fb Post , SignUp, google search is also a type of form 
+    - Types of Forms
+        - Template Driven Form -> mostly work done in component template(.html file)
+        - Reactive Form -> mostly work done in component class(.ts file)
+    - Data flow with Forms 
+        - Template -> Class -> Service -> database
+    

@@ -4,4 +4,47 @@ Q1. Create a component user-list using inline style. Display the text of this co
 Q2. Create a button and in the click event add a function whick will give an alert message as "Button Clicked"
 
 Q3. Create 5 text boxes to show the trigger of events respectively 
-    keyup, keydown, blur, input, mouseover
+    keyup, keydown, blur, input, mouseover 
+
+Q4. Create a textbox in which when user types anything it should be displayed in a paragraph below.
+    Create a button and when user clicks on the button the written text in textbox should be displayed on a paragraph below.
+
+Q5. Create a counter with two buttons to add and subtract the counter.
+
+Q6. Create two text boxes and try to change the disabled property of them using interpolation and property binding respectively on button click.
+
+Q7. Create a program using *ngIf and ng-template to show and hide H1 tag according to condition.
+
+Q8. Create a program where there are three h1 blocks and according to color property particular h1 will display.
+
+Q9. Create a program to switch between color we define as a property and if no condition matches the we have to display unknown color.
+
+Q10. Create a string array of names of users and print it one by one in h2 tag using loop.
+     Create an object array of name,email and phone of users and display it one by one in h5 tag using loop.
+
+Q11. Create an object array as same as above problem. Also add an array in each object of socialLinks and iterate it in form of ul li in browser.
+
+Q12. Create a h2 tag whose color is blue and backgroundColor is yellow.
+     There is a button also and when we click on it color will change to red and backgroundColor to pink . All we have to use is style binding.
+
+Q13. Create a header component in which there is a logo in left and four links on right side. Also apply some style to make it look better.
+
+Q14. Create a basic form using FormsModule which takes user name,email,password and print it below in form of ul li.
+
+Q15. Create a H2 element and a button. Upon click of the button just toggle(show/hide) the element.
+
+Q16. Created a todo list where user can add task which is displayed in form of ul li and also remove the task when user click on Remove button beside each task.
+
+Q17. Create a child component , create a variable in parent component and recieve it in child to display it. Create a button in parent component to genrate a random number and assign to the variable.
+     Show that changes made in parent component is reflected in child component.
+
+Q18. Create a component to show the list of user-details having name and email in the form of list. Add Css to the list so that it looks good.
+
+Q19. Create a child component, In child component there is a button which changes the value of a value declared in the parent component i.e app component.
+     Show that child data can be passed back to parent component.
+
+Q20. Create a textbox and when user type something in the textbox it should be displayed at the same time. Use two way binding to achieve this operation.
+
+Q21. Create a custom pipe to change user input into rupees from usd. user can enter amount in usd.
+
+Q22. Create a Login Form having 2 fields for Id and password. On click of GetValue Button we will get input fields value and on click of GetControls button we will get the full elements details on the console.

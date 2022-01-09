@@ -22,7 +22,7 @@ Need of WebApi(The Problem)
 - Mano hume ek website bnani hai , hmne use bnai Asp.Net MVC me aur database k liye sql use kiya. Hmara website abi database se directly connected hai.
     In future hme website ki android version bhi chaiye aur Ios version bhi. To kya problems aa skti hai:-
     - Duplicate logic for each Application.
-    - Error prone code (Business logic is written in each Application). - galti se koi llogic miss kr diya
+    - Error prone code (Business logic is written in each Application). - galti se koi logic miss kr diya
     - Some frontend Framework can not communicate with database directly.
     - Hard to maintain. - if need to improve something in one application then need to impletement the same for others too.
 -------------------------------------------------------------
@@ -126,6 +126,755 @@ Frequently Used Status Code
 Http Request and Response Examples
     - goto Google.com -> Right Click in the Browser -> Choose Inspect
     - goto Network tab -> click on XHR -> Search for anything -> Click on any request and see the details(Request URL, Request Method , Status Code etc.)
+----------------------------------------------------------------------------
+#Video 12
+Software required
+    - DotNet Core SDK 5/Latest
+    - VS 2019 / VS Code
+    - SQL Server 2019
+    - SSMS (Sql Server Managent Studio)
+    - Postman
+---------------------------------------------------------------------------
+#Video 13
+Difference between .Net SDK and .Net Runtime
+    - SDK will give complete environment to develop, test,  build and deploy your application but Runtime is used only to run the application.
+    - Runtime is already a part of SDK.
+    - Verify SDK installed properly -> dotnet 
+    - To check the version -> dotnet --info 
+-----------------------------------------------------------------------------
+#Video 14
+Installation of Visual Studio 2019/ VS Code
+-----------------------------------------------------------------------------
+#Video 15
+SQL Server
+- is a DBMS and provide the complete environment to save and work with the data of application
+- stores data in form of tables.
+- creates relationship in b/n the tables
+- we can use it from any other server or from local system.
+-----------------------------------------------------------------------------
+#Video 16
+Use of SSMS(SQL Server Managent Studio)
+- SSMS provides the UI to access the SQL Server
+- We can also access the SQL Server using Visual Studio
+----------------------------------------------------------------------------
+#Video 17
+Use Of Postman
+- is an API testing tool
+- provides the complete & nice interface to work with the APIs.
+----------------------------------------------------------------------------
+#Video 18,19,20,21,22,23
+Create first Web Api Project
+- Two ways to reate Web Api Project
+    - Using CLI
+    - Using Visual Studio
+- Steps With CLI
+    - Open cmd inside the folder location
+    - dotnet new -> To list all the template we can use to create a new project.
+    - dotnet new webapi --name MyWebApiProject -> Create a new project with name MyWebApiProject
+    - dotnet build
+    - dotnet run
+    - copy the listening host url from cmd with swagger like - http://localhost:5299/swagger/index.html
+    - we can test it in postaman also - http://localhost:5299/WeatherForecast
+- Steps to create With Visual Studio
+    - Open Visual Studio -> continue with code
+    - File -> New -> Project -> Asp.Net Core WebApi -> Set Name of Project and Path -> Create
+    - Build Solution
+    - Click -> IIS Express 
+-----------------------------------------------------------------------------
+#Video 24
+Web Api Project Structure
+- Dependencies -> contains all the packages and sdk installed in the particular project.
+- Properties -> contains launchSettings.json ->
+    - If we are running our project through IIS Express then Settings are coming from profiles
+    - If we are running our project through command prompt the Settings are coming from ProjectName.
+- appsettings.json -> settings we write for our project is written here. -> like the web.config file earlier.
+    - appsettings.Development.json -> If we are working on Development environment and want to include some settings we can specify here.
+-Program.cs -> Entry Pont of our application. By default Asp.Net core application is a console application so it has a Main Method which is entry point.
+- Startup.cs -> contains two Important methods Configure(contains middleware code) and ConfigureServices(all services we write in application we can specify here.)
+--------------------------------------------------------------------------------
+#Video 25
+- launchSettings.json
+    - IIS server is only present in Windows OS . If we use MAC we have to use Kestrel Web Server provided by dotnet core.
+    - To run your application in Kestrel server -> Just change the IISExpress dropdown to ProjectName and cmd will automatically get opened.
+----------------------------------------------------------------------------------
+#Video 26
+- csproj file
+    Open it by double click on your project or right click and Edit Project File.
+    contains packages info of your application.
+-----------------------------------------------------------------------------------
+#Video 27,28,29,30,31,32,33,34
+- Build Web API Project from scratch(console app to web api app) 
+    - Each dotnet core app is by default console app. We need to add som services and make some changes to convert it into web api project.
+        - File -> New -> Project -> Console Application -> Next -> ProjectName(ConsoleToWebApi) -> Create -> Run to see "Hello World" in command prompt
+    - Steps to convert Console Project to Web Api Project
+        - CSPROJ:
+            - Change Project SDK to Web
+            - Remove the Output type
+            - Verify the target framework moniker(TFM)
+        - Double click on name of application. -> Change SDK from Microsoft.NET.Sdk to Microsoft.NET.Sdk.Web -> Delete <OutputType>Exe</OutputType> -> Save 
+        
+        - Program.cs:
+            - Add the Web Host builder(Host Builder is an object used to add some feature in the application)
+            - Configure the Startup class - Add Routing , Set the default route.
+        - CreateDefaultBuilder - with this we will get
+            - Dependency Injection
+            - Configurations - appsettings.json, appsettings.(env).json, User secrets, Environment variables etc.
+            - Logging - Console, Debug, etc.
+            - Set the content root path to result of GetCurrentDirectory() Method.
+        - In Program.cs file below Main Method add CreateHostBuilder() method like :
+            public static IHostBuilder CreateHostBuilder()
+            {
+                Host.CreateDefaultBuilder();
+            }
+        - ConfigureWebHostDefaults
+            - Provides support for HTTP
+            - Sets the Kestrel server as the web server.
+            - Enable the IIS integration, etc.
+        - In Program.cs file again add some code :
+            .ConfigureWebHostDefaults(webhost =>
+                {
+                    webhost.UseStartUp<>;
+                });
+            - Add a class file Startup and then again modify Program.cs
+                webhost.UseStartup<Startup>();
+            - call the CreateHostBuilder in Main method.
+                CreateHostBuilder().Build().Run();
+            - we can use the args array of Main Method to the CreateHostBuilder                 
+            - remember we cant change the name of CreateHostBuilder to other name of our choice.
+        - Startup Class
+            - ConfigureServices - to configure all the services we want to use in our application
+            - Configure - to configure http request pipeline. all the middleware we want to use in our application we configure here.
+            - We can return a text without any services by using configure class only
+                 public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
+                {
+                    app.UseRouting();
+                    app.UseEndpoints(endpoints =>
+                    {
+                        endpoints.MapGet("/", async context =>
+                        {
+                            await context.Response.WriteAsync("Hello from new Web Api App");
+                        });
+                        endpoints.MapGet("/test", async context =>
+                        {
+                            await context.Response.WriteAsync("Hello from new Web Api App Test");
+                        });
+                    });
+                } 
+            - We can also use the Controller service for that we will use ConfigureServices method.
+            - Controller class
+                - has a "Controller" suffix.
+                - must be inherited from ControllerBase.
+                - use ApiController attribute on Controller
+                - use attribute Routing.
+                - ControllerBase class provides many methods and properties to handle Http request
+            -  ApiController
+                - attribute routing requirement.
+                - handles client error ie. 400 status code.
+                - Multipart/form-data request interface
+                - Bind the incoming data with the parameters using some more attributes.
+            - Steps involved to include controller service
+                - Inside ConfigureServices -> services.AddControllers();
+                    public void ConfigureServices(IServiceCollection services)
+                    {
+                        services.AddControllers();
+                    }
+                    public void Configure(IApplicationBuilder app,IWebHostEnvironment env)
+                    {
+                        if (env.IsDevelopment())
+                        {
+                            app.UseDeveloperExceptionPage();
+                        }
+                        app.UseRouting();
+                        app.UseEndpoints(endpoints =>
+                        {
+                            endpoints.MapControllers();
+                        });
+                    }
+                - Create a Controllers Folder in the root -> Create a TestController.cs
+                    [ApiController]
+                    [Route("test/[action]")]
+                    public class TestController:ControllerBase
+                    {
+                        public string Get()
+                        {
+                            return "Hello from Get";
+                        }
+                        public string Get1()
+                        {
+                            return "Hello from Get1";
+                        }
+                    }
+-----------------------------------------------------------------------
+#Video 35 ,36, 37, 38, 39, 40, 41
+- Middleware
+    - When we send a request from browser to server then middleware comes into picture.
+    - Http Request pipeline
+        - Browser -> Server(Controller1+Controller2+Controller3)
+        - Browser <- Server(particular controller action method)
+        - Before hitting to controller - pass through pipeline 
+        - pipeline has multiple middlewares(Middleware1 Middleware2 Middleware3 etc)
+        - Request -> Middleware1(//code next()) -> Middleware2(//code next()) -> Middleware3(//code)
+        - Response <- Middleware1(//code) <- Middleware2(//code) <- Middleware3(//code)
+    - Middleware is a piece of code that is used in the HTTP request pipeline.
+    - An Asp.Net Core Web application can have n number of middlewares.
+    - Ordder of middleware matters a lot in the execution.
+    - Middleware Examples -> Routing, Authentication, Add exception page.
+    - app.UseRouting(),app.UseEndpoints we have used above are middlewares and thieir order matters.
+
+    - Run(), Use(), Next(), Map() method in middleware
+    - Run() is used to complete middleware execution.
+    - Use() is used to insert a new middleware in the pipeline.
+    - Next() is used to pass the execution to the next middleware. If no Next() it will return to its just previous one.
+    - Map() is used to map the middleware to specific Url.
+    - Examples
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use \n");
+                await next();
+                await context.Response.WriteAsync("Hello from Use 1 \n");
+            });
+            app.Run(async context => {
+                await context.Response.WriteAsync("Hello from Run \n");
+            });
+        - This will reurn Use -> Run -> Use 1
+
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use 1-1 \n");
+                await next();
+                await context.Response.WriteAsync("Hello from Use 1-2 \n");
+            });
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use 2-1 \n");
+                await next();
+                await context.Response.WriteAsync("Hello from Use 2-2 \n");
+            });
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use Complete \n");
+            });
+        - This will return 11 -> 2-1 -> Complete -> 2-2 -> 1-2
+
+        app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use 1-1 \n");
+                await next();
+                await context.Response.WriteAsync("Hello from Use 1-2 \n");
+            });
+            app.Map("/kumar", CustomCode);
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Use 2-1 \n");
+                await next();
+                await context.Response.WriteAsync("Hello from Use 2-2 \n");
+            });
+    private void CustomCode(IApplicationBuilder app)
+        {
+            app.Use(async (context, next) =>
+            {
+                await context.Response.WriteAsync("Hello from Kumar \n");
+            });
+    }
+        - This will return 1-1 -> Kumar -> 1-2 , when we use url->https://localhost:44308/kumar
+    
+    - Creating a custom middleware
+        - Create a class called CustomMiddleware in root directory.
+        - Inherit the class from IMiddleware -> Right click and Implement Interface
+            public class CustomMiddleware : IMiddleware
+            {
+                public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+                {
+                        await context.Response.WriteAsync("Hello from New File 1 \n");
+                        await next(context);
+                        await context.Response.WriteAsync("Hello from New File 2 \n");
+                }
+            }
+        - Inject the new middleware service in ConfigureServices method
+            services.AddTransient<CustomMiddleware>();
+        - In the Configure method we can use the service now
+            app.UseMiddleware<CustomMiddleware>();
+-------------------------------------------------------------------------------
+#Video 42,43,44,45,46,47,48,49,50
+    - Routing
+        - is the process of mapping the incoming http request (URL) to a particular resource(the action method)
+        - we can access any resource by using unique Url
+        - a resource can have multiple unique url
+        - multiple resource can not have same Url
+    - How to Enable Routing
+        - enable through middleware
+        - need to insert these two middleware in http pipeline
+            - UseRouting()
+            - UseEndpoint()
+    - Route on Controller's action method
+        - Create a Controller by right click on controller folder -> Select the API -> Api Controller Empty -> Add
+        - Configure Class should have these methods
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+        - Some Sample routing in the ValuesController we just created
+        [Route("api/get-all")]
+        public string GetAll()
+        {
+            return "Hello from Get All";
+        }
+        [Route("get-all-authors")]
+        public string GetAllAuthors()
+        {
+            return "Hello from Get All Authors";
+        }
+
+        [Route("books/{id}")]
+        public string GetById(int id)
+        {
+            return "Hello from GetById where Book Id : "+id;
+        }
+        [Route("books/{id}/author/{authorId}")]
+        public string GetAuthorById(int id,int authorId)
+        {
+            return "Hello from GetAuthorById where Book Id : " + id +" and Author Id : "+authorId;
+        }
+        -  Query String in Routing
+        - If we did not give the values through parameters of url , the variables will contain default value like for integer it is 0 and for string it is null.
+        - We can pass the values from url irrespective of order.
+        - Example 
+        [Route("search")]
+        public string SearchBook(int id, int authorId,string name,int rating,int price)
+        {
+            return "Hello from search where Book Id : " + id + " and Author Id : " + authorId+" and Name : "+name;
+        }
+            - url -> https://localhost:44308/search?id=10&name=kumar&authorId=101
+            - url -> https://localhost:44308/search?id=10&name=kumar
+        - How many parameters we can pass? -> n number of parameters but the total length of the url including the name and parameter values must be less than actual value of url.
+
+        - We can setup multiple urls for single resource - untill the are unique
+        [Route("api/get-all")]
+        [Route("get-all")]
+        [Route("getall")]
+        public string GetAll()
+        {
+            return "Hello from Get All";
+        }
+        - Same url for multiple resources will give ambiguity error.
+        - Token Replacement in the url -> [Route("[controller]/[action]")] for [Route("values/getAll") -> can be multiple or [Route("[action]/[controller]")] but must be unique
+        - Set the base route at controller level -> means [Route("[controller]/[action]")] at very above before the controller.
+        [Route("[controller]/[action]")]
+        public class ValuesController : ControllerBase
+        {
+            [Route("{id}")]
+            public string GetById(int id)
+            {
+                return "Hello from GetById where Book Id : "+id;
+            }
+        }
+        url -> https://localhost:44308/values/id=10
+
+        - To ignore the base route -> we need to overload our route -> we have to use ~ sign before the route like
+        [Route("~/get-all)]
+------------------------------------------------------------------------------------------------------------------
+#Video 51,52
+- Route Contraints
+    Suppose we have to apply some Contraints to our route like:
+        - id must be int and less than 20 -> http://domain.com/books/1
+        - id must be string -> http://domain.com/books/mvc
+        - id must be greater than 20-> http://domain.com/books/21
+    Type -> int , bool, datetime, double, float etc.
+    - Add a Controller -> BooksController
+    - Example 1
+        [Route("{Id:int}")]
+        public string GetById(int Id)
+        {
+            return "Book Id is : " + Id;
+        }
+        [Route("{Id}")]
+        public string GetById(string Id)
+        {
+            return "Book Name is : " + Id;
+        }
+        - Check it with -> https://localhost:44390/api/books/12
+                        -> https://localhost:44390/api/books/dotnet
+    - Example 2
+        [Route("{Id:int:min(10):max(20)}")]
+        public string GetById(int Id)
+        {
+            return "Book Id is : " + Id;
+        }
+        [Route("{Id}")]
+        public string GetById(string Id)
+        {
+            return "Book Name is : " + Id;
+        }
+        - Check it with -> https://localhost:44390/api/books/12
+                        -> https://localhost:44390/api/books/21 -> this will go to default string function but not the first one.
+    - List of constraints
+        - Min : min(number)
+        - Max : max(number)
+        - MinLength : minlength(10)
+        - MaxLength : maxlength(20)
+        - Length : length(15)
+        - Range : range(10,15) 
+        - Alpha : alpha - accepts on alphabates not number
+        - Required : required
+        - Regex : regex(expression) like regex(a(b|c)) -> It means the word must be start with a and followed by b or c 
+-----------------------------------------------------------------------------------------------
+#Video 53
+- Best Practice for restful urls
+    Restful Urls are defined by using Http verb and the Url 
+    eg : GET + http//example.com/employees
+- Get method best practices
+    - Get + domain.com/employees -> Gets a list of all the employees
+    - Get +domain.com/employees/{employeeId} -> Gets the details of a single employee
+    - Get + domain.com/employees/{employeeId}/accounts -> Gets the account details of a single employee
+    - Get +domain.com/employees/{employeeId}/accounts/{accountId} -> Gets the single account details of a single employee
+- Post method best practices
+    - Post + domain.com/employees
+      Body : Employee object
+      -> Adds a new employee
+    - Post + domain.com/employees/{employeeId}/accounts
+      Body : Account object
+      -> Adds a new account for the employee
+- Put method best practices
+    - Put + domain.com/employees/{employeeId}
+      Body : Employee object
+      -> Updates the employee
+    - Put + domain.com/employees/{employeeId}/accounts
+      Body : Account object
+      -> Updates the specific account for a specific employee
+- Delete method best practice
+    - Delete + domain.com/employees/{employeeId}
+      -> Deletes the employee
+    - Delete + domain.com/employees/{employeeId}/accounts/{accountId}
+      -> Deletes the spesific account for a specific employee
+--------------------------------------------------------------
+#Video 54
+Action method return types
+    - Specific type - to return complex data
+        - Create a Model Folder and add a EmployeeModel class inside it.
+        public class EmployeeModel
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
+        }
+        - Create a EmployeeController
+        [Route("employee")]
+        public EmployeeModel GetEmployees()
+        {
+            return new EmployeeModel() { Id = 101, Name = "Kumar" };
+        }
+        [Route("employee-list")]
+        public List<EmployeeModel> GetEmployeeList()
+        {
+            return new List<EmployeeModel>()
+            {
+                {new EmployeeModel(){Id=101,Name="Kumar" } },
+                {new EmployeeModel(){Id=102,Name="Saurav"} },
+                {new EmployeeModel(){Id=103,Name="Ranveer"} }
+            };
+        }
+        [Route("employee-ienum")]
+        public IEnumerable<EmployeeModel> GetEmployeeListIEnum()
+        {
+            return new List<EmployeeModel>()
+            {
+                {new EmployeeModel(){Id=101,Name="Kumar" } },
+                {new EmployeeModel(){Id=102,Name="Saurav"} },
+                {new EmployeeModel(){Id=103,Name="Ranveer"} }
+            };
+        }        
+
+    - IActionResult - Used to return multiple types of data
+        public EmployeeModel GetEmployees()
+        {
+            return new EmployeeModel() { Id = 101, Name = "Kumar" };
+        }
+
+        [Route("{id}")]
+        public IActionResult GetEmployees(int Id)
+        {
+            if (Id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(
+                     new List<EmployeeModel>()
+                        {
+                            {new EmployeeModel(){Id=101,Name="Kumar" } },
+                            {new EmployeeModel(){Id=102,Name="Saurav"} },
+                            {new EmployeeModel(){Id=103,Name="Ranveer"} }
+                        });
+            }
+        }
+        - https://localhost:44390/api/employee/0
+        - https://localhost:44390/api/employee/1
+    - ActionResult<T> - combination of specific type and IActionResult
+        [Route("{id}/basic")]
+        public ActionResult<EmployeeModel> GetBasicEmployee(int Id)
+        {
+            if (Id == 0)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return new EmployeeModel() { Id = 101, Name = "Kumar" };                     
+            }
+        }
+        - https://localhost:44390/api/employee/1/basic
+
+-----------------------------------------------------------
+#Video 57
+- Format Response with Status Code
+- We can use the Ok() method to return status code 200
+    - Create a Animal Controller and a Animal Model
+    public class Animal
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+
+        public IActionResult GetAnimals()
+        {
+            //return Ok();
+            //return Ok("All Animals");
+            var animals = new List<Animal>(){
+                new Animal() { Id=101,Name="Lion"},
+                new Animal(){Id=102,Name="Tiger"}
+            };
+            return Ok(animals);
+        }
+- We can use the Accepted() method to return status code 202
+    Accepted() -> will give only status code 202
+    Accepted("~api/animals"); -> will give 202 and location: "~api/animals" in Response Headers
+    AcceptedAtAction("GetTestAnimals"); -> will return 202 and location: https://localhost:44390/api/Animal/test in Response Headers
+    AcceptedAtRoute("All"); -> will return 202 and https://localhost:44390/api/Animal/test
+    [Route("test", Name = "All")]
+        public IActionResult GetTestAnimals()
+        {
+            //return Ok("All Animals");
+            var animals = new List<Animal>(){
+                new Animal() { Id=101,Name="Lion"},
+                new Animal(){Id=102,Name="Tiger"}
+            };
+            //return Accepted();
+            //return Accepted("~api/animals");
+            //return AcceptedAtAction("GetTestAnimals");
+            return AcceptedAtRoute("All");
+        }
+- We can use the BadRequest() method to return status code 400
+        private List<Animal> animals = null;
+        public AnimalController()
+        {
+            animals = new List<Animal>(){
+                new Animal() { Id=101,Name="Lion"},
+                new Animal(){Id=102,Name="Tiger"}
+            };
+        }
+        [Route("")]
+        public IActionResult GetAnimals()
+        {
+            return Ok(animals);
+        }
+        [Route("test/{name}")]
+        public IActionResult GetAnimalByName(string name)
+        {
+            if (!name.Contains("abc")){
+                return BadRequest();
+            }
+            else
+            {
+                return Ok(animals);
+            }
+        }
+- We can use Created() method to return status code 201
+    [Route("{id:int}")]
+        public IActionResult GetAnimalById(int id)
+        {
+            if(id == 0)
+                {
+                return BadRequest();
+                }
+            else
+            {
+                return Ok(animals);
+            }
+        }
+        [HttpPost("")]
+        public IActionResult GetAnimals(Animal animal)
+        {
+            animals.Add(animal);
+            //return Created("~api/animal/"+animal.Id, animal);
+            return CreatedAtAction("GetAnimalById", new { id = animal.Id }, animal);
+        }
+- We can Use LocalRedirect to return status code 301 and redirect to a defined local url.
+    [Route("test")]
+        public IActionResult TestAnimal()
+        {
+            return LocalRedirect("~/api/animal");
+        }
+- We can Use NotFound() to return status code 404
+    [Route("{id:int}")]
+        public IActionResult GetAnimalById(int id)
+        {
+            if(id == 0)
+                {
+                return BadRequest();
+                }
+            var animal = animals.FirstOrDefault(x => x.Id == id);
+            if (animal == null)
+            {
+                return NotFound();
+            }
+                return Ok(animal);
+        }
+----------------------------------------------------------
+#Video 64,65
+Model Binder
+    - The process of binding the Http Request data to the parameters of application Controllers or Properties is known as Model Binding.
+    - In Asp.Net there are lots of built-in methods and attributes for model binder.
+    - We can also create our cusom model binder.
+BindProperty
+- BindProperty is an attribute and it is used to map the incoming form-data to the public properties.
+- BindProperty is applied on each target property individually.
+- Example
+    - Create a CountriesController
+        [BindProperty]
+        public string Name { get; set; }
+        [BindProperty]
+        public int Population { get; set; }
+
+        [BindProperty]
+        public int Area { get; set; }
+
+        [HttpPost]
+        public IActionResult AddCountry()
+        {
+            return Ok($"Name={this.Name} Population={this.Population} Area={this.Area}");
+        }
+    - To use BindProperty attribute at one place create a Model CountryModel.cs
+    public class CountryModel
+    {
+        public string Name { get; set; }        
+        public int Population { get; set; }        
+        public int Area { get; set; }
+    }
+
+        //[BindProperty]
+        [BindProperty(SupportsGet =true)]
+        public CountryModel Country { get; set; }
+
+        //[HttpPost]
+        [HttpGet]
+        public IActionResult AddCountry()
+            {
+            return Ok($"Name={this.Country.Name} Population={this.Country.Population} Area={this.Country.Area}");
+        }
+        - Request through Postman and pass Name,Population,Area in the form-data section. We can use both the Get and post method to return the desired output.
+------------------------------------------------------------------
+#Video 66
+- BindProperties attribute
+    - BindProperties is an attribute and it is used to map the incoming form-data to the public properties.
+    - BindProperties work on simple (int,string,etc) and complex data objects.
+    - By default the BindProperties does not work for HTTPGET request.
+    - BindProperties is applied on the controller level.
+- Default way of data binding
+    - The simple(int,float,string, etc ) parameter will bind with the url data.
+    - The complex type will get bind with the body of request.
+- FromQuery attribute
+    - FromQuery attribute is used to bind the data available in query string.
+    - Example - http://localhost:8270/api/countries?name=india&area=3
+    - [HttpPost("{id}")] will not work and also if we pass data in  boby will not work.
+    - Work only with query string (combination of ? followed by &). http...countries?name=China&Population=900&Id=12&area=89
+    - Use -> public IActionResult AddCountry([FromQuery]int id, [FromQuery]CountryModel model)
+- FromRoute
+    - used to bind the data available in route url
+    - Example: http://localhost:8700/api/api/employees/2/departments/3
+    - We can use multiple attributes in single function.
+- FromBody
+    - used to bind the data supplied through the body.
+- FromForm
+    - used to bind the data supplied from form-data
+- FromHeader
+    - used to bind the data supplied from Headers
+----------------------------------------------------------------
+#Video 72
+- Custom Model Binder
+-Example 1
+    - Create a CustomBinder class at the root directory
+    public class CustomBinder : IModelBinder
+    {
+        public Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+            var data = bindingContext.HttpContext.Request.Query;
+            var result = data.TryGetValue("countries", out var country);
+            if (result)
+            {
+                var array = country.ToString().Split("|");
+                bindingContext.Result = ModelBindingResult.Success(array);
+            }
+            return Task.CompletedTask;
+        }
+    }
+    - Use the binder in CountriesController
+        [Route("search")]
+        public IActionResult SearchCountries([ModelBinder(typeof(CustomBinder))]string[] countries)
+        {
+            return Ok(countries);
+        }
+    - https://localhost:44390/api/countries/search?countries=India|China|Usa|Nepal
+
+- Example 2
+    - Create a CustomBinderCountryDettails class at the root directory
+    public class CustomBinderCountryDetails : IModelBinder
+    {
+        public Task BindModelAsync(ModelBindingContext bindingContext)
+        {
+            var modelName = bindingContext.ModelName;
+            var value = bindingContext.ValueProvider.GetValue(modelName);
+            var result = value.FirstValue;
+
+            if(!int.TryParse(result,out var id))
+            {
+                return Task.CompletedTask;
+            }
+
+            var model = new CountryModel()
+            {
+                Id = id,
+                Name = "India",
+                Population = 5000,
+                Area = 400
+            };
+
+            bindingContext.Result = ModelBindingResult.Success(model);
+            return Task.CompletedTask;
+        }
+    }
+    - CountryModel class
+    [ModelBinder(typeof(CustomBinderCountryDetails))]
+    public class CountryModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }        
+        public int Population { get; set; }        
+        public int Area { get; set; }
+    }
+    - Countries Controller
+        [HttpGet("{id}")]
+        public IActionResult CountryDetails([ModelBinder(Name ="Id")]CountryModel country)
+        {
+            return Ok(country);
+        }
+    - https://localhost:44390/api/countries/25
+--------------------------------------------------------------
+
+
+
+
+
 
 
 

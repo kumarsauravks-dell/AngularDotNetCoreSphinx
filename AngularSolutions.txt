@@ -39,3 +39,353 @@ Solution 3
     getData(val:any){
     console.log(val);
   }
+---------------------------------------------------
+Solution 4
+- app.component.html
+<input type="text" #txtBox (keyup)="getVal(txtBox.value)" placeholder="EnterText" name="txtBox">
+<p>You have Typing {{strVal==""?"Nothing":strVal}}</p>
+<button (click)="getValOnClick(txtBox.value)">Click Me</button>
+<p>You have Entered {{strText}}</p>
+- app.component.ts
+  strVal:string="";
+  getVal(val:string){
+    this.strVal=val;
+  }
+  strText:string="";
+  getValOnClick(val:string){
+    this.strText=val;
+  }
+-----------------------------------------------------
+Solution 5
+- app.component.html
+<button (click)="counter('sub')">--</button>
+Counter value is : {{count}}
+<button (click)="counter('add')">++</button>
+- app.component.ts
+  count:number=0;
+  counter(val:string){
+    val=='add'?this.count++:this.count--
+    }
+-----------------------------------------------------
+Solution 6
+- app.component.html
+<input type="text" disabled={{disable}} >
+<input type="text" [disabled]='disable'>
+<button (click)='onDisableClick()'>Disable TextBox</button>
+-app.component.ts
+disable:boolean=false;
+  onDisableClick(){
+    this.disable==true?this.disable=false:this.disable=true;
+  }
+----------------------------------------------------
+Solution 7
+- app.component.html
+<div *ngIf='show then IfBlock else ElseBlock'>
+</div>
+<ng-template #IfBlock>
+    <h1>If Block</h1>
+</ng-template>
+<ng-template #ElseBlock>
+    <h1>Else Block</h1>
+</ng-template>
+
+- app.component.ts
+show:boolean=false;
+-----------------------------------------------------
+Solution 8
+- app.component.html
+<ng-template [ngIf]="color==='red'">
+    <h1 style="color: red;">Red color</h1>
+</ng-template>
+<ng-template [ngIf]="color==='green'">
+    <h1 style="color: green;">Green color</h1>
+</ng-template>
+<ng-template [ngIf]="color==='blue'">
+    <h1 style="color: blue;">Blue color</h1>
+</ng-template>
+
+- app.component.ts
+color='green';
+-----------------------------------------------------
+Solution 9
+- app.component.html
+<div [ngSwitch]="color">
+    <h1 *ngSwitchCase='"red"' style="color: red;">Red Color</h1>
+    <h1 *ngSwitchCase='"green"' style="color: green;">Green Color</h1>
+    <h1 *ngSwitchCase='"blue"' style="color: blue;">Blue Color</h1>
+    <h1 *ngSwitchCase='"purple"' style="color: purple;">Purple Color</h1>
+    <h1 *ngSwitchCase='"pink"' style="color: pink;">Pink Color</h1>
+    <h1 *ngSwitchDefault >Unknown Color</h1>
+</div>
+- app.component.ts
+color='green';
+-----------------------------------------------------
+Solution 10
+- app.component.html
+<h1>List of Users</h1>
+<h2 *ngFor='let user of users;'>{{user}}</h2>
+<h1>Details of users</h1>
+<h5 *ngFor='let user of userDetails'>
+    {{user.name}} -- {{user.email}} -- {{user.phone}}
+</h5>
+
+- app.component.ts
+users:string[]=["Ram", "Shyam","Mohan","Ramesh"];
+  userDetails:any[]=[
+    {name:"Ram",email:"ram@sample.com",phone:8232563252},
+    {name:"Shyam",email:"shyam@sample.com",phone:9232563252},
+    {name:"Mohan",email:"mohan@sample.com",phone:7232563252},
+    {name:"Ramesh",email:"ramesh@sample.com",phone:8238563252}
+  ];
+-----------------------------------------------------
+Solution 11
+- app.component.html
+<h3>List of User Details</h3>
+<ul *ngFor='let user of userDetails'>
+    <li>{{user.name}}</li>
+    <li>{{user.email}}</li>
+    <li>{{user.phone}}</li>
+    <ul *ngFor='let links of user.socialLinks'>
+        <li>{{links}}</li>
+    </ul>
+</ul>
+
+- app.component.ts
+userDetails:any[]=[
+    {name:"Ram",email:"ram@sample.com",phone:8232563252,socialLinks:["facebook","istagram","twitter"]},
+    {name:"Shyam",email:"shyam@sample.com",phone:9232563252,socialLinks:["facebook","linkedin","twitter"]},
+    {name:"Mohan",email:"mohan@sample.com",phone:7232563252,socialLinks:["linkedin","istagram","gmail"]},
+    {name:"Ramesh",email:"ramesh@sample.com",phone:8238563252,socialLinks:["gmail","istagram","twitter"]}
+  ];
+-----------------------------------------------------
+Solution 12
+- app.component.ts
+color:string='blue';
+  bgColor:string='yellow';
+  onClick(){
+    this.color='red';
+    this.bgColor='pink'
+  }
+- app.component.html
+<h2 [style.color]='color' [style.backgroundColor]='bgColor'>Here is some sample text.</h2>
+<button (click)='onClick()'>Click Me!</button>
+-----------------------------------------------------
+Solution 13
+- header.component.html
+<nav>
+    <img src="assets/logo.png" alt="">
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">AboutUs</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Users</a></li>
+    </ul>
+</nav>
+- header.component.css
+nav{
+    background-color: skyblue;
+}
+nav img{
+    width: 70px;
+    border-radius: 50%;
+    padding: 4px;
+    cursor: pointer;
+}
+nav ul{
+    float: right;
+    list-style: none;
+    padding: 0px 20px;
+}
+nav ul li{
+    display: inline-block;
+    padding: 10px;
+}
+nav ul li a{
+    text-decoration: none;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+}
+
+- style.css
+body{
+    margin: 0;
+}
+-----------------------------------------------
+Solution 14
+- app.component.html
+<form #basicForm='ngForm' (ngSubmit)='getFormData(basicForm.value)'>
+    <input type="text" name="user" ngModel placeholder="Please Enter User Name" />
+    <br /><br />
+    <input type="text" name="email" ngModel placeholder="Please Enter User Email" />
+    <br /><br />
+    <input type="text" name="password" ngModel placeholder="Please Enter User Password" />
+    <br /><br />
+    <button>Register</button>
+    <ul>
+        <li>{{userData.user}}</li>
+        <li>{{userData.email}}</li>
+        <li>{{userData.password}}</li>
+    </ul>
+</form>
+- app.component.ts
+userData:any={};
+  getFormData(data:NgForm){
+    console.log(data);
+    this.userData=data;
+  }
+-------------------------------------
+Solution 15
+- app.component.html
+<h2>Toggle Element</h2>
+<button (click)='onClick()'>Click Me to Show/Hide the below Element</button>
+<h2 *ngIf='display'>I am the Element</h2>
+
+- app.component.ts
+display:boolean=true;
+  onClick(){
+    this.display=!this.display;
+  }
+--------------------------------------
+Solution 16
+- app.component.html
+{{title}}
+<br><br>
+<input type="text" #task placeholder="Enter Task">
+<br> <br>
+<button (click)="addTask(task.value)">Add Task</button>
+<ul *ngFor='let item of list'>
+    <li>{{item.value}} <button (click)='removeTask(item.id)'>Remove Task</button></li>
+</ul>
+
+- app.component.ts
+title = 'ToDo List';
+  list:any[]=[];
+  addTask(task:string){
+    this.list.push({id:this.list.length,value:task});
+    console.log(this.list);
+  }
+  removeTask(id:number){
+    this.list=this.list.filter(item=>id!=item.id);
+    console.log(this.list);
+  }
+-----------------------------------------
+Solution 17
+- app.component.html
+{{title}}
+<br><br>
+
+<app-child [item]='data'></app-child>
+<button (click)='changeData()'>Change Data</button>
+
+- app.component.ts
+title = 'Passing Data Parent To Child';
+  data:number=10;
+  changeData(){
+    this.data=Math.floor(Math.random()*10);
+  }
+
+- child.component.html
+<h1>child item value is {{item}}</h1>
+
+- child.component.ts
+@Input() item=0;
+--------------------------------------------
+Solution 18
+- app.component.ts
+title = 'Reusable Component';
+  userDetails=[
+    {name:'Kumar',email:'kumar@test.com'},
+    {name:'Anil',email:'anil@test.com'},
+    {name:'Brijesh',email:'brijesh@test.com'},
+    {name:'Kalyani',email:'kalyani@test.com'}
+  ]
+- app.component.html
+{{title}}
+<br><br>
+
+<ul *ngFor='let user of userDetails'>
+    <app-user-details  [userData]='user'>        
+    </app-user-details>
+</ul>
+
+- user-details.component.html
+<li>{{userData.name}}</li>
+<li>{{userData.email}}</li>
+- user-details.component.ts
+@Input() userData:{name:string,email:string}={name:'',email:''}
+
+- user-details.component.css
+li{
+    display: inline-block;
+    padding: 10px;
+    background: skyblue;
+    color: #fff;
+    font-weight: 400;
+    width: 30%;
+    border-right: 4px solid yellow;;
+}
+-----------------------------------------------------
+Solution 19
+- app.component.ts
+title = "Passing Data from Chid to Parent";
+  data:string='Default Data';
+  updateData(newData:string){
+    this.data=newData;
+  }
+
+- app.component.html
+{{title}}
+<br><br>
+<app-child (childEvent)='updateData($event)'></app-child>
+<br /> <br />
+<h3> Data is : {{data}}</h3>
+
+- child.component.ts
+@Output() childEvent=new EventEmitter<string>();
+
+- child.component.html
+<input type="text" #txtBox />
+<button (click)='childEvent.emit(txtBox.value)'>Update Data</button>
+-------------------------------------------------------
+Solution 20
+- app.component.ts
+title = "Passing Data from Chid to Parent";
+  inputVal:string='';
+
+- app.component.html
+{{title}}
+<br><br>
+<input type="text" [(ngModel)]='inputVal' />
+<h2>{{inputVal}}</h2>
+--------------------------------------------------------
+Solution 21
+- app.component.html
+<h2>{{20 | usdInr:72}}</h2>
+- usd-inr.pipe.ts
+transform(value: number, ...args: number[]): unknown {
+    const [x]=args;
+    return value*x;
+  }
+---------------------------------------------------------
+Solution 22
+- app.component.ts
+title = "Template Driven Form";
+  getValues(data:any){
+    console.log(data);
+  }
+  getControls(data:any){
+    console.log(data);
+  }
+
+- app.component.html
+{{title}}
+<br><br>
+<form #Login='ngForm' (ngSubmit)='getValues(Login.value)'>
+    <input type="text" name="UserName" ngModel placeholder="Enter Uer Name" />
+    <br> <br>
+    <input type="password" name="Password" ngModel placeholder="Enter Password" />
+    <br> <br>
+    <input type="submit" value="GetValue">
+    <input type="button" value="GetControl" (click)='getControls(Login.controls)' />
+</form>
