@@ -37,16 +37,16 @@ Setup and Installation
 
 -----------------------------------------------------
 #Video 3
-- Important Files and Folders fror Beginners
+- Important Files and Folders for Beginners
     - package.json, node_modules, src folder(app, assets, environments, index.html, main.js, style.css)
 - Important Files and Folders for Advance Users 
     - package-lock.json, angular.json, tsconfig Files, .browserslistrc, karma.config.js, pollyfills.js
 - Interview Questions
-    - What happen whren we delete package.json file?
+    - What happen when we delete package.json file?
         - Project will stop as it contains all the details and version of every files.
     - Difference b/n package.json and package-lock.json?
         - package.json contains the overall file description/version/commands but package-lock.json contains the detailed description and internal dependenc information of all files used in the Project.
-    - What happen whren we delete package-lock.json file?
+    - What happen when we delete package-lock.json file?
         - Project will not stop as it will reinstall all the details and version of every files from package.json and will generate package-lock.json again.
 --------------------------------------------------------
 #Video 4
@@ -105,7 +105,7 @@ Setup and Installation
     - goto app.component.ts ant try to display the login component there.
 
 - Interview Questions
-    Questions: When we define a function for the click event why it is comulsury to define the type because in the previous version it is not compulsory?
+    Questions: When we define a function for the click event why it is compulsury to define the type because in the previous version it is not compulsory?
     Ans: In Angular 12 , By default strict mode is true in tsconfig.js . If we change it to false then it is not required.
 -----------------------------------------------------------
 #Video 10
@@ -133,20 +133,20 @@ Setup and Installation
     Question: Priority of the css
     Ans: Inline>Internal>Component>Global 
 ------------------------------------------------------------
-#Video 14
+#Video 14 - Q6
 - Property Binding
-    - kisi element ki property to update krne k liye use krte hain.
+    - kisi element ki property ko update krne k liye use krte hain.
     - Property Binding ko hum boolean value k sath deal krne k liye krte hain, jabki interpolation me string and numbers k liye. disabled k example k sath samjh skte hain.
-#Video 15
+#Video 15 - Q7
 - If-Else
     - To show the Content inside a if block we have to use ng-template.
 -----------------------------------------------------------
-#Video 16
+#Video 16 - Q8
 - Multiple Condition/else if
     - Else if is not present here, if we have to check multiple condition we can use switch.
     - To perform small multiple checks we can compare conditions using ===.
 ------------------------------------------------------------
-#Video 17
+#Video 17 - Q9
 - Switch statement
     - When we want to check for multiple if else then we use ngSwitch.
     - If no condition matches then we can make use of SwitchDefault.
@@ -165,7 +165,7 @@ Setup and Installation
 #Video 20
 - Style Binding
  - dynamic style binding bhi keh skte hai, means style ka data ts file se aayega.
- - eg: [style.color]='color', [style/backgroundColor]='colorOne'
+ - eg: [style.color]='color', [style.backgroundColor]='colorOne'
 -------------------------------------------------------------
 #Video 21
 - Creating a Simple Header Component
@@ -215,7 +215,7 @@ Setup and Installation
 ----------------------------------------------------------------
 #Video 28
 - Send Data Child to Parent
-    - We can pass data from parent to chil using @Input() and from child to parent using @Output
+    - We can pass data from parent to child using @Input() and from child to parent using @Output
     - We can use property binding to pass data from parent to child and use event binding to pass data from child to parent.
     - In case of @Output we need to have EventEmmiter also.
 ----------------------------------------------------------------
@@ -287,4 +287,167 @@ Setup and Installation
         - Reactive Form -> mostly work done in component class(.ts file)
     - Data flow with Forms 
         - Template -> Class -> Service -> database
+---------------------------------------------------------------------
+#Video 36 - Q23
+- Template Driven Form Validation
+    - Apply Required Validation, Show errors messages, and other Validation Examples.
+---------------------------------------------------------------------
+#Video 37 - Q24
+- Reactive Form in Angular
+    - Make Simple form, Import module and form control, Connect Form controls with Form, Get values from form , Default values in Form
+    - import {ReactiveFormsModule} from '@angular/forms' in module file
+    - import FormGroup and FormControl from '@angular/forms' in component
+    - bind the FormGroup with a property in component.html and define that property in component.ts
+-----------------------------------------------------------------------
+#Video 38 - Q25
+- Reactive Form Validation
+    - Import Validators, Apply Validators, define getter for fields, show error and disable button.
+    - Import Validators from '@angular/forms'
+    - Use getter to get the values of the form like
+        get user(){
+            return this.LoginForm.get('user');
+        }
+---------------------------------------------------------------------
+#Video 39 - Q26
+- Directive in Angular
+    - Make a directive and update the element
+    - Element me kuch additional features provide krti hain.
+    - command to create a directive -> ng g directive reEl
+---------------------------------------------------------------------
+#Video 40
+- Basic Routing
+    - Create a new project -> routing-blog
+    - Create three component -> user , home , about
+    - In routing.module.ts file give the path for each component.
+    - use routerLink="path" in compomonent.html to define the path of route 
+    - Include <router-outlet></router-outlet
+- Dynamic Routing
+    - Pass data in the routing, Get data in routing
+    - Create a path for route with some id 
+        {
+            path:"user",component:UserComponent
+        }
+    -  Define the route with specific id
+        <a routerLink="user/30">User 30</a>
+        <br /><br />
+        <a routerLink="user/40">User 40</a>
+        <br /><br />
+        <a routerLink="user/50">User 50</a>
+    - Get the value of the route from the component defined
+        constructor(private route:ActivatedRoute) { }
+
+        ngOnInit(): void {
+            console.log("user id is "+this.route.snapshot.paramMap.get('id'));
+        }
+-------------------------------------------------------------------------
+#Video 41 
+- Wild Card Route - 404 Page
+- To include Page not found Page in our route we have to generate a compomonent no-page and define
+    {
+        path:"**",component:NoPageComponent
+    }
+-------------------------------------------------------------------------
+#Video 42
+- Child Routes
+    - Make child routes, Make links to child route
+    - Create two component about-company, about-me
+    - Define the routes for the components like
+        {
+            path:"about",component:AboutComponent
+            ,children:[
+            {path:'company',component:AboutCompanyComponent},
+            {path:'me',component:AboutMeComponent}
+            ]
+        }
+    - Define the path and set routerLink
+        <h1>About Main Page</h1>
+        <a routerLink="me">About Me</a>
+        <br><br>
+        <a routerLink="company">About Company</a>
+        <router-outlet></router-outlet>
+-------------------------------------------------------------------------
+#Video 43  - Q27
+- What is Services? Why do we need it?
+    - Ek class hoti hai jaha data , properties aur function hote hain jinhe hum multiple files k andar use kr skte hain.
+    - command -> ng g s user-data
+--------------------------------------------------------------------------
+#Video 44 
+- Call API in Angular
+    - create a service 'user-data'-> import {HttpClient} from '@angular/common/http'
+    - import HttpClientModule in your module.ts
+    - In the service file register HttpClient like
+    constructor(private http:HttpClient){ }
+    url="http://localhost:3000/GetAllData";
+    users(){
+        return this.http.get(this.url);
+    }
+    - In the component we have to subscribe.
+    users:any;
+    constructor(private userData:UserDataService){ 
+        userData.users().subscribe((data)=>{this.users=data});
+    }
+    - Post request
+        - service.ts
+        saveUsers(data:any){
+            return this.http.post(this.url,data);
+        }
+        - component.ts
+        getUsersFormData(data:any){
+            this.userData.saveUsers(data).subscribe((result)=>{console.log(result)});
+        }
+--------------------------------------------------------------------------
+#Video 45
+- Model
+    - We can define model to define the datatype of object values , to prevent the further errors.
+    export interface dataType{
+        name:string,
+        id:number,
+        indian:boolean,
+        address:string
+    }
+    import {dataType} from './user'
+    getData(){
+        const data:dataType={
+            name:"Kumar",
+            id:20,
+            indian:true,
+            address:'Noida'
+        }
+        return data;
+    }
+
+---------------------------------------------------------------------
+Hooks
+    - ngOnChanges
+        - called when component get created and also when value of @input properties changes 
+    - ngOnInit
+        - called when component initializes , just after the constructor.
+    - ngDoCheck
+        - whenever a change is detected,also when an event fires.
+    - ngAfterContentInit
+        - called after the content that is projected via ng-content
+    - ngAfterContentChecked
+        - called whenever the ng-content is checked 
+    - ngAfterViewInit
+        - initialised once the view of the component is rendered
+    - ngAfterViewChecked
+        - every time a view is checked.
+    - ngOnDestroy
+        - when a component is about to be destroyed, used for cleanup work
+-------------------------------------------------------------------------------Parent child , child parent, form both reactive form and template Driven
+- https://github.com/sudheerj/angular-interview-questions
+
+- Component - Basic building block to control HTML Views
+- Module - Set of basic build block like component,directive, service
+- Template - represents the view
+- Services - data which need to shared in diffrent files of Application
+- Metadata - used to add more data to an angular class,represented by decorator eg:@Component decorator,@NgModule decorator
+- Directive - add behaviour to an existing DOM element
+- Pipes - to transform data
+
+- Practice Project -> Shopping Website, Job Portal
+
+
+
+
     

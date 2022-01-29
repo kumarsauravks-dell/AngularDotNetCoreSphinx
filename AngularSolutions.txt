@@ -350,7 +350,7 @@ title = "Passing Data from Chid to Parent";
 -------------------------------------------------------
 Solution 20
 - app.component.ts
-title = "Passing Data from Chid to Parent";
+title = "Two Way Data Binding";
   inputVal:string='';
 
 - app.component.html
@@ -389,3 +389,115 @@ title = "Template Driven Form";
     <input type="submit" value="GetValue">
     <input type="button" value="GetControl" (click)='getControls(Login.controls)' />
 </form>
+-------------------------------------------------------------
+Solution 23
+<form #Login='ngForm' (ngSubmit)='getValues(Login.value)'>
+    <input type="text" name="UserName" pattern="[a-zA-Z]+$" required #user='ngModel' ngModel placeholder="Enter Uer Name" />
+    <br>
+    <span style="color: red;" *ngIf="user.invalid && user.touched">Please Enter a valid Input</span><br />
+    <br>
+    <input type="password" name="Password" minlength="4" required #pass='ngModel' ngModel placeholder="Enter Password" />
+    <br> 
+    <span style="color: red;" *ngIf="pass.invalid && pass.touched">Please Enter a valid Input</span><br />
+    <br>
+    <input [disabled]='Login.invalid' type="submit" value="GetValue">
+    <input  type="button" value="GetControl" (click)='getControls(Login.controls)' />
+</form>
+----------------------------------------------------------------------
+Solution 24
+- component.ts
+LoginForm=new FormGroup({
+    user:new FormControl(''),
+    password:new FormControl('')
+  });
+
+  loginUser(){
+    console.log(this.LoginForm.value);
+  }
+- component.html
+<form [formGroup]='LoginForm' (ngSubmit)='loginUser()'>
+    <input type="text" formControlName='user' name="user" placeholder="Enter UserName" />
+    <br /> <br />
+    <input type="password" formControlName='password' name="password" placeholder="Enter Password">
+    <br /> <br />
+    <input type="submit" value="Login">
+</form>
+----------------------------------------------------------------------
+Solution 25
+- component.ts
+LoginForm=new FormGroup({
+    user:new FormControl('',[Validators.required,Validators.pattern('[a-zA-Z]+$')]),
+    password:new FormControl('',[Validators.required,Validators.minLength(5)])
+  });
+
+  loginUser(){
+    console.log(this.LoginForm.value);
+  }
+
+  get user(){
+    return this.LoginForm.get('user');
+  }
+  get pass(){
+    return this.LoginForm.get('password');
+  }
+- component.html
+<form [formGroup]='LoginForm' (ngSubmit)='loginUser()'>
+    <input type="text" formControlName='user' name="user" placeholder="Enter UserName" />
+    <br /> 
+    <span style="color: red;" *ngIf='user && user.invalid && user.touched'>This field is required and expects characters only</span>
+    <br />
+    <input type="password" formControlName='password' name="password" placeholder="Enter Password">
+    <br />
+    <span style="color: red;" *ngIf='pass && pass.invalid && pass.touched'>This field is required, and min length is 5</span>
+    <br />
+    <input [disabled]='LoginForm.invalid' type="submit" value="Login">
+</form>
+----------------------------------------------------
+Solution 26
+- red-el.directive.ts
+import { Directive,ElementRef } from '@angular/core';
+
+@Directive({
+  selector: '[appRedEl]'
+})
+export class RedElDirective {
+
+  constructor(private el:ElementRef) { 
+    //el.nativeElement.innerText="red";
+  }
+  ngOnInit(){
+    this.el.nativeElement.innerText="New Text";
+    console.log(this.el)
+  }
+}
+- component.html
+  <h1>Sample Text</h1>
+  <h1 appRedEl >Sample Text</h1>
+----------------------------------------------------
+- user-data.service.ts
+data(){
+    return [
+      {name:"Kumar", age:24,email:"kumar@test.com"},
+      {name:"Saurav", age:24,email:"saurav@test.com"},
+      {name:"Anil", age:24,email:"anil@test.com"},
+      {name:"Amar", age:24,email:"amar@test.com"},
+    ]
+  }
+
+- user.component.ts
+  constructor(private route:ActivatedRoute,private userData:UserDataService) { }
+
+  users:any;
+  ngOnInit(): void {
+    this.users=this.userData.data();
+  }
+
+- user.component.html
+<ul>
+    <li *ngFor='let user of users'>
+        {{user.name}} : {{user.email}}
+    </li>
+</ul>
+-----------------------------------------
+
+

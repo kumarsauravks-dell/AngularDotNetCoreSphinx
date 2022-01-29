@@ -870,6 +870,462 @@ BindProperty
         }
     - https://localhost:44390/api/countries/25
 --------------------------------------------------------------
+#Video 75
+- Dependency Injection
+    - Controller -> Repository -> Database
+    - Suppose we have two containers , HomeController and EmailSender
+        - The normal way of using Repository in controller
+            EmailSender sender=new EmailSender();
+            sender.SendEmail();
+        - To use the concept of dependency Injection we have to create interfaces for each Repository and these interface will implements methods correpondingly - it means controller dont know directly about the Repository.
+        - The main concept behind Dependency Injection is to implement IOC(Inversion of control)
+        - IOC means to have loosely coupling in the code.
+        - Unit testing also became esy with Dependency Injection
+    - How to configure DI
+        - Asp.Net Core framework provides the built-in support for DI.
+        - Dependency are registered in containers, and the container in asp.net core is IServiceProvider.
+        - Services are registered in the Startup.ConfigureServices method of the application.
+    - Lifetime of Services in DI
+        - Singleton
+        - Scoped
+        - Transient
+----------------------------------------------------------------------------
+#Video 76
+- Working with Services without using dependency Injection
+    - Create a Repository folder -> ProductRepository.cs
+    - Create a Model -> ProductModel and add two properties Id and Name.
+    - ProductModel.cs
+    public class ProductModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    - ProductRepository.cs
+    public class ProductRepository
+    {
+        private List<ProductModel> products = new List<ProductModel>();
+
+        public int AddProduct(ProductModel product)
+        {
+            product.Id = products.Count + 1;
+            products.Add(product);
+            return product.Id;
+        }
+
+        public List<ProductModel> GetAllProducts()
+        {
+            return products;
+        }
+    }
+    - ProductController.cs
+        private readonly ProductRepository _productRepository;
+        public ProductController()
+        {
+            _productRepository = new ProductRepository();
+        }
+        [HttpPost("")]
+        public IActionResult AddProduct([FromBody]ProductModel product)
+        {
+            _productRepository.AddProduct(product);
+            var products = _productRepository.GetAllProducts();
+            return Ok(products);
+        }
+---------------------------------------------------------------------
+#Video 77
+- Singleton 
+    - Singleton services can be registered using AddSingleton<> method.
+    - There will be only one instance of the singleton service throughout the application.
+
+    - Right click on ProductRepository class and QuickAction -> Extract Interface.
+        private readonly IProductRepository _productRepository;
+        public ProductController(IProductRepository repository)
+        {
+            _productRepository = repository;
+        }
+        [HttpPost("")]
+        public IActionResult AddProduct([FromBody]ProductModel product)
+        {
+            _productRepository.AddProduct(product);
+            var products = _productRepository.GetAllProducts();
+            return Ok(products);
+        }
+    - Also we have to register this service in Startup.cs file inside ConfigureServices method.
+    services.AddSingleton<IProductRepository, ProductRepository>();
+
+---------------------------------------------------------------------------------
+#Video 78
+- Scoped 
+    - Scoped Services can be registered using AddScoped<> method.
+    - A new instance of the service will be created for new HTTP Request.
+    services.AddScoped<IProductRepository, ProductRepository>();
+-----------------------------------------------------------------------------------
+#Video 79
+- Transient
+    - can be registered using AddTransient<> method.
+    - a new instance of the service will be created every time it is requested.
+    - Lets say Controller A is using a Transient service S 3times in same Http Request , then there willl be three seperate instances of this S service.
+-------------------------------------------------------------------------
+#Video 80
+- TryAddScoped, TryAddSingleton, TryAddTransient
+    - If we are registering the dependency using AddScoped, AddSingleton or AddTransient method then they will replace the service in the collection if it has already been registered in the container.
+    - Now if we use the Try version like TryAddScoped then it will only register the service if it was not registered earlier . In case service was already registered then the TryAddScoped will skip the registration for that service.
+        public string GetName()
+        {
+            return "Name from Product Repository";
+        }
+        
+        [HttpGet("")]
+        public IActionResult GetName()
+        {
+            var name = _productRepository.GetName();
+            return Ok(name);
+        }
+
+        services.AddSingleton<IProductRepository, ProductRepository>();
+            services.AddSingleton<IProductRepository, TestRepository>();
+-------------------------------------------------------------------------
+#Video 81
+- Resolve the Service dependency directly in the Action Method.
+    - We want to use the Repository methods in other controllers.
+        [HttpGet("name")]
+        public IActionResult GetName([FromServices] IProductRepository _productRepository)
+        {
+            var name = _productRepository.GetName();
+            return Ok(name);
+
+        }
+-------------------------------------------------------------------------
+#Video 82
+- Book Store Web Api Application
+    - Create a new BookStoreApi Project
+    - Create a BooksController inside it.
+    - Create a Repository folder and add a class BookRepository in it.
+        public class BookRepository : IBookRepository
+        {
+        }
+    - Create an inerface IBookRepository 
+        public interface IBookRepository
+        {
+        }
+    - Register the service in the Startup.cs inside ConfigureServices method
+        services.AddTransient<IBookRepository, BookRepository>();
+-----------------------------------------------------------------------------
+#Video 83, 84
+- Working with Entity Framework Core
+    - Asp.Net Core Application <-> Entity Framework Core <-> Database
+    - Open Source framework from Microsoft that works a bridge b/n application and database.
+    - compitable with any dot net application and any RDBMS.
+    - Microsoft's official technology to interact with database.
+    - is  an O/RM and works on the object oriented perspective.
+    - it means all the tables are convedrted into c# classes and the corresponding columns are convderted as the properties of the classes.
+    - Working Approach
+        - Code first 
+        - Database First
+- Install Entity Framework Core
+    - Microsoft.EntityFrameworkCore
+        - Microsoft.EntityFrameworkCore.Relational 
+        - Microsoft.EntityFrameworkCore.SqlServer  -  5.0.3
+    - Microsoft.EntityFrameworkCore.Tools  -  5.0.3
+    - Microsoft.EntityFrameworkCore.Design - 5.0.3
+----------------------------------------------------------------------------
+#Video 85
+- Setup the DbContext Class
+    - Create a Data folder & add a new Class BookStoreContext.cs
+    public class BookStoreContext:DbContext
+    {
+        public BookStoreContext(DbContextOptions<BookStoreContext> options) :base(options)
+        {
+
+        }
+        public DbSet<Books> Books { get; set; }
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Server=.;Database=BookStoreApi;Integrated Security=True");
+        //    base.OnConfiguring(optionsBuilder);
+        //}
+    }
+    - Create a Books.cs class inside the Data Folder
+    public class Books
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+    - Include the Service in Startup.cs file's ConfigureServices method
+        //services.AddDbContext<BookStoreContext>();
+        services.AddDbContext<BookStoreContext>(options => options.UseSqlServer("Server=.;Database=BookStoreApi;Integrated Security=True"));
+-----------------------------------------------------------------
+#Video 86
+- Read Connection String from appsettings.json file
+    - Add a connection string to appsettings.json
+    "ConnectionStrings": {
+    "BookStoreDb": "Server=.;Database=BookStoreApi;Integrated Security=True;"
+    },
+    - In the Startup.cs class now we can use
+    services.AddDbContext<BookStoreContext>(options => options.UseSqlServer(Configuration.GetConnectionString("BookStoreDb")));
+--------------------------------------------------------------------
+#Video 87
+- Generate Sql Server database using Entity Framework Core migration
+    - Tools -> NuGet package manager Console -> add-migration init 
+    - See the generated file under Migration folder -> See the table name and the columns which are same as we defined. If there is an Id column it ill be treated as primary key by default
+    - Now Run Command -> update-database -> Now check SqlServer
+    - Two tables got created one is Books and other is for migration , whenever we will create a table the migration will be updated.
+---------------------------------------------------------------------
+#Video 88
+- Get API - Get all items
+    - Create a BookModel inside the Model folder
+    public class BookModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+    - BookRepository.cs 
+    public class BookRepository : IBookRepository
+    {
+        private readonly BookStoreContext _context;
+
+        public BookRepository(BookStoreContext context)
+        {
+            _context = context;
+        }
+        public async Task<List<BookModel>> GetAllBooksAsync()
+        {
+            var records =await _context.Books.Select(x => new BookModel()
+            {
+                Id=x.Id,
+                Title=x.Title,
+                Description=x.Description
+            }).ToListAsync();
+            return records;
+        }
+    }
+    - IBookRepository
+    public interface IBookRepository
+    {
+        Task<List<BookModel>> GetAllBooksAsync();
+    }
+    - BooksController
+    [Route("api/[controller]")]
+    [ApiController]
+    public class BooksController : ControllerBase
+    {
+        private readonly IBookRepository _bookRepository;
+
+        public BooksController(IBookRepository bookRepository)
+        {
+            _bookRepository = bookRepository;
+        }
+
+        [HttpGet("")]
+        public async Task<IActionResult> GetAllBooks()
+        {
+            var books = await _bookRepository.GetAllBooksAsync();
+            return Ok(books);
+        }
+    }
+----------------------------------------------------------
+#Video 89
+- Get one item from database
+    - BookRepository.cs
+        public async Task<BookModel> GetBookByIdAsync(int id)
+        {
+            var record = await _context.Books.Where(x => x.Id==id).Select(x=> new BookModel()
+            {
+                Id = x.Id,
+                Title = x.Title,
+                Description = x.Description
+            }).FirstOrDefaultAsync();
+            return record;
+        }
+    - IBookRepository.cs
+        Task<BookModel> GetBookByIdAsync(int id);
+    - BooksController.cs
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetBookById([FromRoute]int id)
+        {
+            var book = await _bookRepository.GetBookByIdAsync(id);
+            if (book == null)
+            {
+                return NotFound();
+            }
+            return Ok(book);
+        }
+-----------------------------------------------------------
+#Video 90
+- Add one item to database - POST API
+    - BookRepository.cs
+        public async Task<int> AddBookAsynk(BookModel bookModel)
+        {
+            var book = new Books()
+            {
+                Title = bookModel.Title,
+                Description = bookModel.Description
+            };
+            _context.Books.Add(book);
+            await _context.SaveChangesAsync();
+            return book.Id;
+        }
+    - IBookRepository.cs
+        Task<int> AddBookAsynk(BookModel bookModel);
+    - BooksController.cs
+        [HttpPost("")]
+        public async Task<IActionResult> AddNewBook([FromBody]BookModel bookmodel)
+        {
+            var id = await _bookRepository.AddBookAsynk(bookmodel);
+            return CreatedAtAction(nameof(GetBookById),new { id = id, controller = "books" },id);
+        }
+    - Postman 
+        Method - POST
+        Url - https://localhost:44305/api/books
+        Body -  {
+                    "Title":"JavaScript",
+                    "Description":"Scripting Language"
+                }
+---------------------------------------------------------------
+#Video 91
+- Update one item - PUT API
+    - BookRepository.cs
+        public async Task UpdateBookAsynk(int bookId,BookModel bookModel)
+        {
+            var book =await _context.Books.FindAsync(bookId);
+            if (book != null)
+            {
+                book.Title = bookModel.Title;
+                book.Description = bookModel.Description;
+
+                await _context.SaveChangesAsync();
+            }
+        }
+    - IBookRepository.cs
+        Task UpdateBookAsynk(int bookId,BookModel bookModel)
+    - BooksController.cs
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateBook([FromBody] BookModel bookmodel,[FromRoute] int id)
+        {
+            await _bookRepository.UpdateBookAsynk(id,bookmodel);
+            return Ok();
+        }
+    - Postman 
+        Method - PUT
+        Url - https://localhost:44305/api/books/3
+        Body -  {
+                    "Title":"JavaScript Refresher",
+                    "Description":"Scripting Language"
+                }
+----------------------------------------------------------------------
+#Video 92
+- Update item in one database call
+    - BookRepository.cs
+        public async Task UpdateBookAsynk(int bookId,BookModel bookModel)
+        {
+            var book = new Books()
+            {
+                Id = bookId,
+                Title = bookModel.Title,
+                Description = bookModel.Description
+            };
+            _context.Books.Update(book);
+            await _context.SaveChangesAsync();
+        }
+------------------------------------------------------------------------
+#Video 93
+- Partially Update an item - HTTPPATCH
+    - HTTP Patch Installation
+        - Microsoft.AspNetCore.JsonPatch
+        - Microsoft.AspNetCore.Mvc.NewtonsoftJson
+    - Just search json patch -> select version 5.0.3
+    - Just search newtonsoftjson -> select version 5.0.3
+    - Use AddNewtonsoftJson() in the startup class
+        - In Startup.cs -> services.AddControllers().AddNewtonsoftJson();
+    - BookRepository.cs
+        public async Task UpdateBookPatchAsync(int bookId, JsonPatchDocument bookModel)
+        {
+            var book = await _context.Books.FindAsync(bookId);
+            if (book != null)
+            {
+                bookModel.ApplyTo(book);
+
+                await _context.SaveChangesAsync();
+            }
+        }
+    - IBookRepository.cs
+        Task UpdateBookPatchAsync(int bookId, JsonPatchDocument bookModel);
+
+    - BooksController.cs
+        [HttpPatch("{id}")]
+        public async Task<IActionResult> UpdateBookPatch([FromBody] JsonPatchDocument bookmodel, [FromRoute] int id)
+        {
+            await _bookRepository.UpdateBookPatchAsync(id, bookmodel);
+            return Ok();
+        }
+    - Postman 
+        Method - PATCH
+        Url - https://localhost:44305/api/books/3
+        Body -  [
+                    {
+                        "op":"replace",
+                        "path":"Title",
+                        "value":"JavaScript Refresher Two"
+                    },
+                    {
+                        "op":"replace",
+                        "path":"Description",
+                        "value":"Scripting Something"
+                    }
+                ]
+        Body - [
+                    {
+                        "op":"remove",
+                        "path":"Title"
+                    }
+                ]
+---------------------------------------------------------
+#Video 94
+- Delete item from database - DELETE API
+    - BookRepository.cs
+        public async Task DeleteBookAsync(int bookId)
+        {
+            var book = new Books() { Id = bookId };
+            _context.Books.Remove(book);
+            await _context.SaveChangesAsync();
+        }
+    - IBookRepository.cs
+        Task DeleteBookAsync(int bookId);
+    - BooksController.cs
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteBook( [FromRoute] int id)
+        {
+            await _bookRepository.DeleteBookAsync(id);
+            return Ok();
+        }
+    - Postman
+        Method - DELETE
+        url - https://localhost:44305/api/books/3
+----------------------------------------------------------
+#Video 95
+- Implement Model validation in Web Api
+    - BookModel.cs
+    using System.ComponentModel.DataAnnotations;
+    public class BookModel
+    {
+        public int Id { get; set; }
+        [Required(ErrorMessage ="Please Enter Book Title")]
+        public string Title { get; set; }
+        public string Description { get; set; }
+    }
+    - Postman
+    Post a record without the title -> it will return the error message
+-------------------------------------------------------------
+#Video 96
+- Automapper -> Model ke property, object k sath map krna pdata hai baar baar.Jab bahut jada propa property honge to bahut tough ho jata hai isliye Automapper use krenge.
+    - Just search a package with keyword - automapper
+    - Install -> Automapper.Extensions.Microsoft.DependencyInjection
+    - Startup.cs
+        - In ConfigureServices method add 
+        services.AddAutoMapper(typeof(Startup));
+    
 
 
 

@@ -48,3 +48,18 @@ Q20. Create a textbox and when user type something in the textbox it should be d
 Q21. Create a custom pipe to change user input into rupees from usd. user can enter amount in usd.
 
 Q22. Create a Login Form having 2 fields for Id and password. On click of GetValue Button we will get input fields value and on click of GetControls button we will get the full elements details on the console.
+
+Q23. Create a Login Form having 2 fields for Id and password. 
+     Apply validation like username must be required and accept only character.
+     Password is required and have a minimum length of 4 characters.
+     Submit button must be disabled untill all the validations are set to false.
+
+Q24. Create a form using reactive forms and console log the username and password entered by the user when clicking the login button.
+
+Q25. Create a reactive form having two fields for username and password && having the following validations
+     Both the two field is required,Username should accept only characters not number, Password min length should be five.
+     Login button should be disabled untill user enters valid inputs.
+
+26. Create a custom directive to change the text of the element in which it ids applied.
+
+27. Create a service called user-data and declare an array of some users. Show the users of the service in other component.
